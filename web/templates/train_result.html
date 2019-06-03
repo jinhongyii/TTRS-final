@@ -1,0 +1,20 @@
+<div> 
+    <ul class="list-group">
+    <li class="list-group-item list-group-item-info">
+    编号 {{ train['train_id'] }} 名称 {{ train['name'] }} 车次类型{{ train['catalog'] }} 过站数 {{ train['num_station'] }}  
+    </li>
+    {% for t in list %}
+            <li class="list-group-item  list-group-item-primary">
+                站名 {{ t['name'] }} 到达时间 {{ t['time_arrival'] }} 出发时间 {{ t['time_start'] }} 停站时间 {{ t['time_stopover'] }}
+        {% for w in price %}
+                 {{ w }} : {{ t[w] }} 
+            </li>
+        {% endfor %}
+    {% endfor %}
+    </ul>
+    <a href="/modify_train?train={{train}}&list={{list}}&price={{price}}"
+    <button class="btn btn-primary btn-block btn-raised" > 
+        点击修改车次信息
+    </button>
+    </a>
+</div>

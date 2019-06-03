@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="prompt_loc1">From? </string>
+    <string name="prompt_loc2">To? </string>
+    <string name="prompt_date">Enter Date</string>
+    <string name="prompt_catalog">Enter catalog</string>
+    <string name="prompt_transfer">Transfer</string>
+
+    <string name="query_train_failed">An error occurred during query</string>
+    <string name="ticket_not_found">No ticket found!</string>
+
+</resources>

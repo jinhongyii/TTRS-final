@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+
+
+{% block content %}
+    <div class="container mt-5" style="width:500px">
+        <div class="card card-body">
+            <form id="query">
+                <div class="form-group">
+                    <label>车次编号: </label>
+                    <input v-model="train_id" type="text" class="form-control" id="id">
+                </div>
+                <button v-on:click="submit" class="btn btn-primary btn-block btn-raised">查询</button>
+            </form>
+        </div>
+    </div>  
+    <div id="result" class="container mt-5 "></div>
+
+    <script>
+        var vm = new Vue({
+            el: '#query',
+            data: 
+            {
+                train_id:''
+            },
+            methods: {
+                handleData: function(event) {
+                    this.catalog = event;
+                    //console.log(catalog);
+                },
+                submit: function(event) {
+                    event.preventDefault();
+                    $.ajax({
+                        type: 'POST',
+                        url: '/api/query_train',
+                        data: {
+                            'train_id': this.train_id
+                        },
+                        success: function(data) {
+                            $('#result').html(data);
+                        },
+                        error: function(XMLHttpRequest, textStatus) {
+                            console.log(XMLHttpRequest);
+                            alert(XMLHttpRequest.responseText);
+                        }
+                    });
+                }
+            }
+        });
+    </script>
+{% endblock %}

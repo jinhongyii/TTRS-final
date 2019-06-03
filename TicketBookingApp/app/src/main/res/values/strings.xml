@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">TicketBookingApp</string>
+    <string name="not_logged_in">Please Log in!</string>
+    <string name="failed">Failed for some reason...</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_register">Register</string>
+    <string name="menu_login">Login</string>
+    <string name="menu_logout">Logout</string>
+    <string name="menu_query_ticket">Query Ticket</string>
+    <string name="menu_query_train">Query Train</string>
+    <string name="menu_myTicket">My Tickets</string>
+
+    <string name="positive_button">OK</string>
+    <string name="search">Search</string>
+    <string name="cancel">Cancel</string>
+    <string name="add_price">Add Price</string>
+
+    <string name="tmp">TMPPPP</string>
+    <string name="error">Fuck, an error occurred!</string>
+
+</resources>

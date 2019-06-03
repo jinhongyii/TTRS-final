@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5" style="width:500px">
+    <div class="card card-body">
+        <form id="info">
+            <div class="form-group">
+                <label for="name">用户名: </label>
+                <input v-model="name" type="text" class="form-control" id="name"
+                       placeholder="Enter name here">
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="password1">新密码: </label>
+                <input v-model="password1" type="password" class="form-control" id="password1"
+                       placeholder="Enter password here">
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="password2">确认密码: </label>
+                <input v-model="password2" type="password" class="form-control" id="password2"
+                       placeholder="Enter password again here">
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="email">Email: </label>
+                <input v-model="email" type="email" class="form-control" id="email"
+                       placeholder="Enter email here">
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="phone">手机号: </label>
+                <input v-model="phone" type="text" class="form-control" id="phone"
+                       placeholder="Enter phone here">
+            </div>
+            <br>
+            <button v-on:click="submit" type="submit" class="btn btn-outline-primary btn-block">修改</button>
+        </form>
+    </div>
+</div>
+
+<script>
+function encrypt(str) {
+    var t = CryptoJS.SHA1(str).toString(CryptoJS.enc.Hex).slice(0,20);
+    //console.log(t);
+    return t;
+}
+
+var vm = new Vue({
+    delimiters: ['[[', ']]'],
+    el: '#info',
+    data: {
+        name: '',
+        password1: '',
+        password2: '',
+        email: '',
+        phone: '',
+        message: ''
+    },
+    methods: {
+        submit: function (event) {
+            event.preventDefault();
+            if (this.password1 != this.password2) {
+                alert('两次密码不匹配');
+                return;
+            }
+            $.ajax({
+                type: 'POST',
+                url: '/api/modify_profile',
+                data: {
+                    'name': this.name,
+                    'password': encrypt(this.password1),
+                    'email': this.email,
+                    'phone': this.phone
+                },
+                success: function(data){
+                   alert('修改成功');
+                },
+                error: function(XMLHttpRequest, textStatus) {
+                    console.log(XMLHttpRequest);
+                    alert(XMLHttpRequest.responseText);
+                }
+            });
+        }
+    }
+});
+</script>
+{% endblock %}

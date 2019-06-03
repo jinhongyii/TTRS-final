@@ -1,0 +1,8 @@
+/web/.idea/*
+/backend/test_kit/*
+/.idea/*
+/cmake-build-debug/*
+/web/__pycache__/*
+/web/blueprint/__pycache__/*
+/test_kit2018/*
+/build/*

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_activity_ticket_info">Ticket Info</string>
+    <string name="prompt_buy">输入退票数量</string>
+    <string name="buy_success">买票成功！</string>
+    <string name="buy_fail">等一会儿再来试试吧</string>
+    <string name="no_ticket">还没买票噢！</string>
+</resources>

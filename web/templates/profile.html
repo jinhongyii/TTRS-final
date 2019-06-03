@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row" style="margin-top:2rem">
+    <div class="col-md-4">
+        <div class="card" style="margin-left:3rem">
+            <div class="containter">
+                <img class="card-imp-top" src="{{ "https://www.tinygraphs.com/squares/" + user_full[0] + "?theme=daisygarden"}}" alt="No
+                image" style="margin-top: 3rem; border-radius: 0%">
+            </div>
+            <div class="card-body">
+                <h2 class="card-title"> {{ user_full[0] }} </h2>
+                Email: {{ user_full[1] }}
+                <br>
+                Phone: {{ user_full[2] }}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <h2>购票信息</h2>
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link" data-toggle="collapse" data-target="{{"#collapse" + cnt|string }}"
+                            aria-controls="{{"collapse" + cnt|string }}">
+                            编号 {{ t['train_id'] }} 出发时间 {{ t['date_from'] }} {{ t['time_from'] }} 到达时间 {{ t['date_to'] }} {{ t['time_to'] }}
+                            <br>
+                            <strong>{{ t['loc_from'] }} ---> {{ t['loc_to'] }}</strong>
+                            <br>
+                            点击查看具体信息
+                            </button>
+                        </h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="{{"collapse" + cnt|string }}" class="collapse">
+        <div class="card-body text-info">
+            {% for p in t['price'] %}
+            <p> {{ p['seat_type'] }}</p>
+            <pre>购买数量：{{ p['ticket_left'] }}  价格：{{ p['price'] }}元</pre>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

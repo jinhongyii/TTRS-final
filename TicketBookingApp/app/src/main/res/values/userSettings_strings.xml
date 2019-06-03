@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="action_modify">Modify!</string>
+    <string name="prompt_old_password">Enter old password here</string>
+    <string name="prompt_old_password_again">Enter old password here again!</string>
+    <string name="prompt_new_password">Enter new password here</string>
+    <string name="avatar">avatar.jpg</string>
+    <string name="modify_failed">Modify Failed</string>
+    <string name="modify_success">修改成功！</string>
+</resources>

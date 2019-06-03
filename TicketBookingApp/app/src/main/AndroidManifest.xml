@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.ttrs.ticketbookingapp">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme.NoActionBar"
+        tools:ignore="GoogleAppIndexingWarning">
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-2844361784519495~4258466834" />
+
+        <activity
+            android:name=".Ticket.MyTicket"
+            android:label="Ticket Info" />
+
+        <activity
+            android:name=".Ticket.TicketInfo"
+            android:label="@string/title_activity_ticket_info" />
+        <activity
+            android:name=".Train.ModifyTrainPre"
+            android:label="@string/title_activity_modify_train" />
+        <activity
+            android:name=".Train.ModifyTrain"
+            android:label="@string/title_activity_modify_train" />
+        <activity
+            android:name=".Train.QueryTrain"
+            android:label="@string/title_activity_query_train" />
+        <activity
+            android:name=".User.UserSetting"
+            android:label="User Settings" />
+        <activity
+            android:name=".User.RegisterActivity"
+            android:label="@string/title_activity_register"
+            tools:ignore="InnerclassSeparator" />
+        <activity
+            android:name=".User.LoginActivity"
+            android:label="@string/title_activity_login"
+            tools:ignore="InnerclassSeparator" />
+        <activity
+            android:name=".Ticket.QueryTicket"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

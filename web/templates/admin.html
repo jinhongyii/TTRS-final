@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <a class="nav-link" href="/add_train">添加车次</a>
+    <a class="nav-link" href="/query_train">查询车次</a>
+    <a class="nav-link" href="/sale_train">公开车次</a>
+    <a class="nav-link" href="/delete_train">删除车次</a>
+    <a class="nav-link" data-toggle="modal" data-target="#myModal">增加管理员</a>
+
+
+    <div class="container">
+        <div class="modal fade" id="myModal">
+          <div class="modal-dialog">
+            <div class="modal-content" id="query">
+              <div class="modal-header">
+                用户ID    
+              </div>
+              <div class="modal-body">
+                <input v-model="id" type="text" class="form-control"></input>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" v-on:click="submit">提交</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+              </div>
+            </div>
+          </div>
+        </div>
+<script>
+  var vm = new Vue({
+            el: '#query',
+            data: 
+            {
+                id:''
+            },
+            methods: {
+                handleData: function(event) {
+                    this.catalog = event;
+                    //console.log(catalog);
+                },
+                submit: function(event) {
+                    event.preventDefault();
+                    $.ajax({
+                        type: 'POST',
+                        url: '/api/modify_privilege',
+                        data: {
+                            'id2': this.id,
+                            'change': 2
+                        },
+                        success: function(data) {
+                           alert('修改成功');
+                        },
+                        error: function(XMLHttpRequest, textStatus) {
+                            console.log(XMLHttpRequest);
+                            alert(XMLHttpRequest.responseText);
+                        }
+                    });
+                }
+            }
+        });
+</script>
+{% endblock %}

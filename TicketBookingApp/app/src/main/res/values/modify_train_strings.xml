@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="prompt_trainId">输入火车id</string>
+    <string name="prompt_trainName">输入火车名称</string>
+    <string name="prompt_trainCatalog">输入火车种类</string>
+
+    <string name="prompt_station">Enter Station name</string>
+    <string name="prompt_time_arrival">Enter time of arrival(hh:mm)</string>
+    <string name="prompt_time_start">Enter time of start(hh:mm)</string>
+    <string name="prompt_time_stopover">Enter time of stopover(hh:mm)</string>
+    <string name="prompt_price">Enter price(￥)</string>
+    <string name="prompt_seat">Enter Seat Type</string>
+
+    <string name="configure_train">Configure Train</string>
+    <string name="configure_station">Configure Station</string>
+    <string name="add_station">Add Station</string>
+    <string name="add_seat">Add Seat</string>
+
+    <string name="modify_train_failed">Fail to modify train</string>
+    <string name="modify_train_success">Successfully modified train</string>
+</resources>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="login">login %s %s</string>
+    <string name="register">register %s %s %s %s</string>
+    <string name="query_profile">query_profile %s</string>
+    <string name="modify_profile">modify_profile %s %s %s %s %s</string>
+    <string name="query_train">query_train %s</string>
+    <string name="delete_train">delete_train %s</string>
+    <string name="sale_train">sale_train %s</string>
+    <string name="modify_train">modify_train %s</string>
+    <string name="add_train">add_train %s</string>
+    <string name="query_ticket">query_ticket %s %s %s %s</string>
+    <string name="query_transfer_ticket">query_transfer %s %s %s %s</string>
+    <string name="buy_ticket">buy_ticket %s %s %s %s %s %s %s</string>
+    <string name="refund_ticket">refund_ticket %s %s %s %s %s %s %s</string>
+    <string name="query_all_ticket">query_all_ticket %s</string>
+</resources>

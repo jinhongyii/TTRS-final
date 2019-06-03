@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<script>
+var train_catalog = Vue.component('train_catalog', {
+    template: `
+        <div class="form-group">
+        <label class="col-md-2 col-form-label">车辆类型</label>
+        <select class="form-control" v-model="selected" multiple>
+            <option v-for="c in catalog"> {% raw %} {{ c }} {% endraw %}</option>
+        </select>
+        <br>
+        <ul class="list-group flex-md-row">
+            <li class="list-group-item" v-for="s in selected"> {% raw %} {{ s }} {% endraw %}</li>
+        </ul>
+        </div>
+    `,
+    data: function() {
+        return {
+            catalog: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
+            selected: []
+        }
+    },
+    watch: {
+        selected: {
+            handler: function() { this.$emit('newdata', this.selected); },
+            deep: true
+        }
+    }
+});
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card card-body">
+        <form id="query">
+            <div class="form-row">
+                <div class="form-group col-md-5">
+                    <label>出发地</label>
+                    <input v-model="loc1" type="text" class="form-control" placeholder="出发地">
+                </div>
+                <div class="form-group mr-3 ml-3">
+                    <br>
+                    <button v-on:click="change" type="reset" class="btn btn-outline-dark">切换</button>
+                </div>
+                <div class="form-group col-md-5">
+                    <label>目的地</label>
+                    <input v-model="loc2" type="text" class="form-control" placeholder="目的地">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-5">
+                    <label>出发时间</label>
+                    <input v-model="date" type="date" class="form-control" placeholder="出发时间">
+                </div>
+            </div>
+            <train_catalog @newdata="handleData($event)"></train_catalog>
+            <div class="form-row checkbox">
+                <label class="form-check-label">
+                    <input v-model="transfer" class="form-check-input" type="checkbox">必须中转
+                </label>
+            </div>
+            <br>
+            <div class="form-group">
+                <button v-on:click="submit" type="submit" class="btn btn-primary btn-block btn-raised">查询</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div id="result"></div>
+
+<script>
+var vm = new Vue({
+    el: '#query',
+    data: {
+        loc1: '',
+        loc2: '',
+        date: '',
+        transfer: false,
+        catalog: []
+    },
+    methods: {
+        handleData: function(event) {
+            this.catalog = event;
+            //console.log(catalog);
+        },
+        change: function(event) {
+            event.preventDefault();
+            var t = this.loc1;
+            this.loc1 = this.loc2;
+            this.loc2 = t;
+        },
+        submit: function(event) {
+            event.preventDefault();
+            if (this.transfer)  url = '/query_transfer_ticket';
+            else url = '/query_ticket';
+            $.ajax({
+                type: 'GET',
+                url: url,
+                data: {
+                    'loc1': this.loc1,
+                    'loc2': this.loc2,
+                    'date': this.date,
+                    'catalog': this.catalog.toString().replace(/,/g,'')
+                },
+                success: function(data) {
+                    $('#result').html(data);
+                },
+                error: function(XMLHttpRequest, textStatus) {
+                    console.log(XMLHttpRequest);
+                    alert(XMLHttpRequest.responseText);
+                }
+            });
+        }
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_activity_query_train">Query Train</string>
+    <string name="title_activity_modify_train">Configure Train</string>
+    <string name="search_failed">Invalid Search</string>
+    <string name="sale_failed">Fail to sale this train!</string>
+    <string name="sale_success">Successfully sale this train!</string>
+    <string name="delete_failed">Fail to delete this train!</string>
+    <string name="delete_success">Successfully delete this train!</string>
+    <string name="display_timeInfo">到达时间: %s 出发时间: %s 停留时间: %s</string>
+</resources>
