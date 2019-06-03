@@ -18,12 +18,13 @@ fun read(filename: String) : List<String> {
 }
 
 fun main() {
-    var loc = read("C:\\Users\\Gabriel\\Documents\\DataStructure\\TTRS\\TicketBookingApp\\app\\src\\main\\assets\\all.in")
+    var loc = read("C:\\Users\\Gabriel\\Documents\\DataStructure\\final\\TTRS-final\\TicketBookingApp\\app\\src\\main\\assets\\all.in")
     var fileContent = ""
 
     for (i in loc) {
         fileContent += "<item> " + i+"|"
         var result = mutableListOf<String>()
+        var result2: String = ""
 
         for (c in i) {
             var format = HanyuPinyinOutputFormat()
@@ -31,10 +32,16 @@ fun main() {
             format.setToneType(HanyuPinyinToneType.WITHOUT_TONE)
             format.setVCharType(HanyuPinyinVCharType.WITH_V)
             var t = PinyinHelper.toHanyuPinyinStringArray(c, format)
-            if (t.size == 1) result.add(t[0]);
-            else result.add(t[1]);
+            if (t.size == 1) {
+                result.add(t[0])
+                result2 += t[0][0]
+            }
+            else {
+                result.add(t[0])
+                result2 += t[0][0]
+            }
         }
-        fileContent += result.joinToString(separator = "") + " </item>\n"
+        fileContent += result.joinToString(separator = "") + result2 +" </item>\n"
     }
     print(fileContent)
 }
