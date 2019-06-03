@@ -62,17 +62,28 @@ add_executable(Console
         backend/util.cpp)
 
 
-
-
-#find_package(Boost REQUIRED COMPONENTS
-#        system)
-#add_executable(server
-#        backend/console-application/server.cpp
-#        backend/console-application/user.cpp
-#        backend/console-application/TrainManager.cpp
-#        backend/console-application/TicketQuery.cpp
-#        backend/util/MemoryController.cpp
-#        backend/console-application/TicketManager.cpp
-#        )
-#target_link_libraries(server ${Boost_LIBRARIES})
+find_package(Boost REQUIRED COMPONENTS
+        system)
+add_executable(server
+        backend/console-application/server.cpp
+        backend/console-application/user.cpp
+        backend/resource/src/logging/log_recovery.cpp
+        backend/console-application/TrainManager.cpp
+        backend/console-application/TicketQuery.cpp
+        backend/util/MemoryController.cpp
+        backend/console-application/TicketManager.cpp
+        backend/resource/src/buffer/buffer_pool_manager.cpp
+        backend/resource/src/buffer/lru_replacer.cpp
+        backend/resource/src/disk/disk_manager.cpp
+        backend/resource/src/hash/hash_method.cpp
+        backend/resource/src/page/header_page.cpp
+        backend/resource/src/page/table_page.cpp
+        backend/resource/src/include/page/directory_page.hpp
+        backend/resource/src/table/new_table_heap.cpp
+        backend/resource/src/table/tuple.cpp
+        backend/resource/src/common/config.cpp
+        backend/resource/src/logging/log_manager.cpp
+        backend/resource/src/concurrency/transaction_manager.cpp
+        backend/util.cpp)
+target_link_libraries(server ${Boost_LIBRARIES})
 

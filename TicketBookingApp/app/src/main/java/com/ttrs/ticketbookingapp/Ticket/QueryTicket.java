@@ -158,6 +158,7 @@ public class QueryTicket extends BaseActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                getSharedPreferences("userInfo", Context.MODE_PRIVATE).edit().putBoolean("isBuy", true).apply();
                                 if (mInterstitialAd.isLoaded() && Math.random() < 0.5) {
                                     mInterstitialAd.show();
                                 }
@@ -179,6 +180,7 @@ public class QueryTicket extends BaseActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                getSharedPreferences("userInfo", Context.MODE_PRIVATE).edit().putBoolean("isBuy", true).apply();
                                 Snackbar.make(v, R.string.query_train_failed, Snackbar.LENGTH_LONG).show();
                                 if (mInterstitialAd.isLoaded()) {
                                     mInterstitialAd.show();
