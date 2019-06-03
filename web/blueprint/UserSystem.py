@@ -25,7 +25,7 @@ def home_page():
     current_user = session.get('current_user', None)
     if current_user is None:
         return '', 302, {'Location': '/login'}  # asks the user to login if not already
-    return render_template('main.html', user=query_current_user()[0])
+    return render_template('query_ticket.html', user=query_current_user()[0], admin=get_privilege())
 
 @UserSystem.route('/admin')
 def admin_page():
@@ -108,9 +108,10 @@ def profile_page():
     logger.debug('current user: %s' % query_current_user())
     t1 = query_current_user()[0]
     t2 = query_current_user()
-    t3 = runCommand('query_order ' + session['current_user'])
-    t3 = parse_ticket(t3[1:])
-    return render_template('profile.html', user=t1, user_full=t2, t=t3,admin=int(query_current_user()[3]) - 1)
+    #t3 = runCommand('query_order ' + session['current_user'])
+    #t3 = parse_ticket(t3[1:])
+    t3 = [{'train_id': '24000000G309', 'loc_from': '北京南', 'date_from': '2019-06-01', 'time_from': '14:00', 'loc_to': '上海虹桥', 'date_to': '2019-06-01', 'time_to': '18:28', 'price': [{'seat_type': '特等座', 'ticket_left': '2000', 'price': '4434.78'}, {'seat_type': '高级软卧', 'ticket_left': '2000', 'price': '1050.9'}, {'seat_type': '动卧', 'ticket_left': '2000', 'price': '3495.61'}, {'seat_type': '软座', 'ticket_left': '2000', 'price': '4874.54'}, {'seat_type': '二等座', 'ticket_left': '2000', 'price': '5620.45'}]}, {'train_id': '24000000G10F', 'loc_from': '北京南', 'date_from': '2019-06-01', 'time_from': '09:00', 'loc_to': '上海虹桥', 'date_to': '2019-06-01', 'time_to': '13:28', 'price': [{'seat_type': '动卧', 'ticket_left': '2000', 'price': '5613.14'}]}]
+    return render_template('profile.html', user=t1, user_full=t2, ticket=t3,admin=int(query_current_user()[3]) - 1, user_id=session['current_user'])
 
 @UserSystem.route('/settings')
 def settings_page():
@@ -150,8 +151,8 @@ def modify_privilege():
 @UserSystem.route('/api/refund', methods=['POST'])
 def refund_api():
     para = ('id', 'num', 'train_id', 'loc1', 'loc2', 'date', 'ticket_kind')
-    ret = runCommand(' '.join(['refund'] + get_args(para, request.form)))
-    if ret == 0:
+    ret = runCommand(' '.join(['refund_ticket'] + get_args(para, request.form)))
+    if ret[0] == 0:
         return msg['refund_failed'], 400
     else:
-        return ret
+        return ret[0]

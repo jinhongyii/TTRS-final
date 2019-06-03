@@ -3,6 +3,7 @@ import asyncore, socket
 remote_host = ('108.61.126.68', 9001)
 logger = None
 
+
 def send(command):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect(remote_host)
@@ -11,7 +12,7 @@ def send(command):
     while True:
         t = s.recv(1024)
         if t != b'':
-            ret += t.decode()
+            ret += t.decode('utf-8','ignore')
         else:
             break
     return ret
@@ -33,6 +34,7 @@ def parse(result):
 def init(log):
     global logger
     logger = log
+	
 
 
 def runCommand(command):

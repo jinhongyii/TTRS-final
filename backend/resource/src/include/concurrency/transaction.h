@@ -1,7 +1,3 @@
-/**
- * transaction.h
- */
-
 #pragma once
 
 #include <atomic>
@@ -53,11 +49,6 @@ public:
       delete page_set_;
       delete deleted_page_set_;
   }
-
-  //===--------------------------------------------------------------------===//
-  // Mutators and Accessors
-  //===--------------------------------------------------------------------===//
-
 
   inline txn_id_t GetTransactionId() const { return txn_id_; }
 

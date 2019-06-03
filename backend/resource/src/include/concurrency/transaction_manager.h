@@ -1,8 +1,3 @@
-/**
- * transaction_manager.h
- *
- */
-
 #pragma once
 #include <atomic>
 #include <unordered_set>

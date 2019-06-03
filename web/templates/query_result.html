@@ -82,9 +82,12 @@ var info = Vue.component('info_with_buy', {
         }
     }
 });
-var app = new Vue({
-  el: '#app'
-});
+var app = [];
+for (var i=0;i<100;i++) {
+    app.push(new Vue({
+    el: '#app'+ i.toString()
+}));
+}
 </script>
 
 <div>
@@ -110,13 +113,13 @@ var app = new Vue({
                 <p> {{ p['seat_type'] }}</p>
                 <pre>剩余数量：{{ p['ticket_left'] }}  价格：{{ p['price'] }}元</pre>
                 {% endfor %}
-                <button class="btn btn-primary btn-raised" data-toggle="modal" data-target="#buy-query">购买</button>
+                <button class="btn btn-primary btn-raised" data-toggle="modal" data-target={{"#buy-query"+cnt|string}}>购买</button>
 
-                <div class="modal" id="buy-query" aria-hidden="true">
-                    <div class="modal-dialog" id="app">
+                <div class="modal" id={{"buy-query"+cnt|string}} aria-hidden="true">
+                    <div class="modal-dialog" id={{"app"+ cnt|string}}>
                         <info_with_buy
                                 v-bind:seat="{{ t['price'] }}"
-                                user_id="{{ user }}"
+                                user_id="{{ user_id }}"
                                 train_id="{{ t['train_id'] }}"
                                 loc1="{{ t['loc_from'] }}"
                                 loc2="{{ t['loc_to'] }}"

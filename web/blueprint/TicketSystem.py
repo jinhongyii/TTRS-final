@@ -1,4 +1,4 @@
-from flask import request, render_template, abort, Blueprint
+from flask import request, render_template, abort, Blueprint, session
 
 from client import runCommand
 from .utility import msg, get_args, logger, query_current_user, get_privilege
@@ -36,7 +36,8 @@ def query_ticket():
     num = int(ret[0][0])
     ret = parse_ticket(ret[1:])
     logger.debug('ticket info: %s' % ret)
-    return render_template('query_result.html', user=query_current_user()[0], num=num, ticket=ret, transfer=False)
+    print(ret)
+    return render_template('query_result.html', user=query_current_user()[0], num=num, ticket=ret, transfer=False, user_id=session['current_user'])
 
 
 @TicketSystem.route('/query_transfer_ticket')

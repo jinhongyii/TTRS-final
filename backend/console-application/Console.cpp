@@ -8,14 +8,17 @@ int main(int argc,char* argv[]){
     std::ios::sync_with_stdio(false);
     std::cin.tie(0);
     std::cout.tie(0);
-    if (argc >=1 && argv[0]=="--recovery") {
-        logRecovery.Redo();
-        logRecovery.Undo();
+    bool flag=true;
+    for (int i = 1; i < argc; i++) {
+      if (strcmp(argv[i] , "--nologging")==0) {
+        ENABLE_LOGGING=false;
+      } else if (strcmp(argv[i] , "--norecovery")==0) {
+        flag=false;
+      }
     }
-    if (argc >= 2 && argv[1] == "--enable_logging") {
-      ENABLE_LOGGING= true;
-    } else {
-      ENABLE_LOGGING=false;
+    if (flag) {
+      logRecovery.Redo();
+      logRecovery.Undo();
     }
     //    std::fstream f("../backend/test_kit/8/1.in");
     Console console;

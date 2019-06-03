@@ -43,6 +43,6 @@ def get_privilege(user=None):
 
 def query_current_user():
     if 'logged_in' not in session:
-        return [None,]
+        return [None,0,0,0]
     ret = runCommand('query_profile ' + session['current_user'])
     return ret

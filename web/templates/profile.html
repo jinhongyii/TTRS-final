@@ -17,33 +17,126 @@
         </div>
     </div>
     <div class="col-md-8">
+        <h2>购票信息</h2>
         <div class="card">
-            <div class="card-body">
-                <h2>购票信息</h2>
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="mb-0">
-                            <button class="btn btn-link" data-toggle="collapse" data-target="{{"#collapse" + cnt|string }}"
-                            aria-controls="{{"collapse" + cnt|string }}">
-                            编号 {{ t['train_id'] }} 出发时间 {{ t['date_from'] }} {{ t['time_from'] }} 到达时间 {{ t['date_to'] }} {{ t['time_to'] }}
-                            <br>
-                            <strong>{{ t['loc_from'] }} ---> {{ t['loc_to'] }}</strong>
-                            <br>
-                            点击查看具体信息
-                            </button>
-                        </h5>
-                    </div>
-                </div>
+            {% for t in ticket %}
+            {% set cnt = loop.index %}
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <button class="btn btn-link" data-toggle="collapse" data-target="{{"#collapse" + cnt|string }}"
+                    aria-controls="{{"collapse" + cnt|string }}">
+                    编号 {{ t['train_id'] }} 出发时间 {{ t['date_from'] }} {{ t['time_from'] }} 到达时间 {{ t['date_to'] }} {{ t['time_to'] }}
+                    <br>
+                    <strong>{{ t['loc_from'] }} ---> {{ t['loc_to'] }}</strong>
+                    <br>
+                    点击查看具体信息
+                    </button>
+                </h5>
             </div>
-        </div>
-    </div>
-    <div id="{{"collapse" + cnt|string }}" class="collapse">
-        <div class="card-body text-info">
-            {% for p in t['price'] %}
-            <p> {{ p['seat_type'] }}</p>
-            <pre>购买数量：{{ p['ticket_left'] }}  价格：{{ p['price'] }}元</pre>
+            <div id="{{"collapse" + cnt|string }}" class="collapse">
+                <div class="card-body text-info">
+                    {% for p in t['price'] %}
+                    <caption> {{ p['seat_type'] }}</caption>
+                    <br>
+                    <a>购买数量：{{ p['ticket_left'] }}  价格：{{ p['price'] }}元</a>
+                    <br>
+                    {% endfor %}
+                    <button class="btn btn-primary btn-raised" data-toggle="modal" data-target={{"#buy-query"+cnt|string}}>退订</button>
+                    <div class="modal" id={{"buy-query"+cnt|string}} aria-hidden="true">
+                        <div class="modal-dialog" id={{"app"+ cnt|string}}>
+                            <info_with_buy
+                                    v-bind:seat="{{ t['price'] }}"
+                                    user_id="{{ user_id }}"
+                                    train_id="{{ t['train_id'] }}"
+                                    loc1="{{ t['loc_from'] }}"
+                                    loc2="{{ t['loc_to'] }}"
+                                    date="{{ t['date_from'] }}"
+                            ></info_with_buy>
+                        </div>
+                    </div>
+             </div>
+                    
+            </div>
             {% endfor %}
-        </div>
+        </div>        
     </div>
 </div>
+<script>
+  var info = Vue.component('info_with_buy', {
+    template: `
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">退订</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <select v-model="seat_type" class="form-control">
+                        <option v-for="k in seat"> {% raw %} {{ k['seat_type'] }} {% endraw %}</option>
+                    </select>
+                </div>
+                <br>
+                <div>
+                    <label>退订数量</label>
+                    <input v-model="num" type="number" class="form-control">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button v-on:click="buy" type="button" class="btn btn-primary">确认</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    `,
+    props: {
+        seat: {
+            type: Object
+        },
+        user_id: String,
+        train_id: String,
+        loc1: String,
+        loc2: String,
+        date: String
+    },
+    data: function() {
+        return {
+            seat_type: '',
+            num: ''
+        }
+    },
+    methods: {
+        buy() {
+            $.ajax({
+                type: 'POST',
+                url: '/api/refund',
+                data: {
+                    id: this.user_id,
+                    num: this.num,
+                    train_id: this.train_id,
+                    loc1: this.loc1,
+                    loc2: this.loc2,
+                    date: this.date,
+                    ticket_kind: this.seat_type
+                },
+                success: function(data) {
+                    $('#buy-query').modal('hide');
+                    alert('退订成功');
+                },
+                error: function(XMLHttpRequest, textStatus) {
+                    console.log(XMLHttpRequest);
+                    alert(XMLHttpRequest.responseText);
+                }
+            });
+        }
+    }
+});
+var app = [];
+for (var i=0;i<100;i++) {
+    app.push(new Vue({
+    el: '#app'+ i.toString()
+}));
+}
+</script>
+        
 {% endblock %}

@@ -15,7 +15,9 @@ def sale_train_page():
 @TrainSystem.route('/api/sale_train', methods=['POST'])
 def sale_train():
     ret = runCommand('sale_train ' + request.form['train_id'])
-    if ret == 0:
+    print('sale_train ' + request.form['train_id'])
+    print(ret)
+    if ret[0] == 0:
         return msg['sale_failed'], 400
     else:
         return ret[0]
@@ -50,12 +52,14 @@ def query_train():
         print('AAA')
         return render_template('query_train.html')
     ret = runCommand('query_train ' + request.form['train_id'])
-    print(ret)
-    #ret = [['abc123456', 'G123456', 'G', 2, 1, '商务座'], ['北京', 'xx:xx', '08:00', '00:00', '￥0.0'], ['夏威夷', '08:01', 'xx:xx', '00:00', '￥1.5']]
+  #  print(ret)
+    #ret = [['5600000G4270', 'G42(杭州东-北京南)', 'G', '12', '4', '高级软卧', '商务座', '软卧', '一等座', '', '', '', '', '', '', '', '', ''], ['杭州东', 'xx:xx', '09:24', 'xx:xx', '￥0', '￥0', '￥0', '￥0', ''], ['桐乡', '09:41', '09:43', '00:02', '￥1366.86', '￥2822.44', '￥870.47', '￥1390.84', ''], ['嘉兴南', '09:54', '09:56', '00:02', '￥1330.56', '￥2880.76', '￥798.33', '￥1003.2', ''], ['上海虹桥', '10:24', '10:26', '00:02', '￥762.79', '￥1398.45', '￥603.01', '￥738.74', ''], ['无锡东', '10:55', '10:57', '00:02', '￥665.18', '￥1301.58', '￥415.74', '￥511.68', ''], ['镇江南', '11:26', '11:28', '00:02', '￥1071.84', '￥1185.8', '￥346.5', '￥785.4', ''], ['南京南', '11:47', '11:51', '00:04', '￥1562.65', '￥2179.25', '￥627.73', '￥1380.12', ''], ['徐州东', '13:05', '13:08', '00:03', '￥824.32', '￥1073.42', '￥304.3', '￥744.72', ''], ['泰安', '13:59', '14:01', '00:02', '￥1061.42', '￥2162.16', '￥655.19', '￥1343.16', ''], [' 济南西', '14:18', '14:27', '00:09', '￥1356', '￥2162.82', '￥833.94', '￥1446.4', ''], ['天津南', '15:30', '15:32', '00:02', '￥1036.12', '￥1546.16', '￥512.04', '￥1134.52', ''], ['北京 南', '16:06', '16:06', 'xx:xx', '￥392.4', '￥462', '￥156.6', '￥216', '']]
     if len(ret) and ret[0] == '0':
-        abort(Response(msg['invalid_query']))
+        return msg['invalid_query'], 400
     ret = parse_train(ret)
-    print(ret);
+    print(ret[0])
+    print(ret[1])
+    print(ret[2])
     return render_template('train_result.html', train=ret[0], list=ret[1], price=ret[2])
 
 @TrainSystem.route('/add_train')
@@ -69,11 +73,11 @@ def delete_train_page():
 
 @TrainSystem.route('/api/delete_train', methods=['POST'])
 def delete_train():
-   # if get_privilege() != 3:
-   #     abort(Response(msg['permission_denied']))
+    if get_privilege() != 1:
+        return msg['permission_denied'], 400
     ret = runCommand('delete_train ' + request.form['train_id'])
-    if ret == 0:
-        abort(Response(msg['delete_failed']))
+    if ret[0] == 0:
+        return msg['delete_failed'], 400
     return ret[0]
 
 
@@ -81,35 +85,37 @@ def encode_train(train):  # encode from a JSON object
     n = len(train)
     t = int(train[n-1]['price_kind'])
     print(type(t))
+    print(train)
     s = train[n-1]['name'] + ' ' + train[n-1]['time_arrival'] + ' ' + train[n-1]['time_start'] + ' ' + train[n-1]['time_stopover'] + ' ' + train[n-1]['price_kind']
     for i in range(0, t):
         s += ' ' + train[i]['price_kind']
-    s += '\n'
-    for i in range(0, n - 1):
+    i = 0
+    while i < (n -1):
+        s += '\n'
         s += train[i]['name'] + ' ' + train[i]['time_arrival'] + ' ' + train[i]['time_start'] + ' ' + train[i]['time_stopover']
         for j in range(0, t):
             s += ' '  + train[i+j]['price']
-        s += '\n'
+        i += t
+        
     return s 
  
 
 @TrainSystem.route('/api/add_train', methods=['POST'])
 def add_train(): 
-    #if get_privilege() != 3:
-    #    abort(Response(msg['permission_denied']))
-	a = request.get_data().decode('utf-8')
-	a = json.loads(a)
-	encode_train(a)
-	print(a)
-	print('add_train ' + encode_train(a))
-	ret = runCommand('add_train ' + encode_train(a))
-	return ret[0]
-
-@TrainSystem.route('/modify_train')
-def modify_train_page():
-    print("WWWW")
-    ret = [request.args['train'], request.args['list'], request.args['price']]
+    if get_privilege() != 1:
+        return msg['permission_denied'] ,400
     a = request.get_data().decode('utf-8')
+    a = json.loads(a)
+    ret = runCommand('add_train ' + encode_train(a))
+    return ret[0]
+
+@TrainSystem.route('/modify_train', methods=['POST'])
+def modify_train_page():
+    ret = runCommand('query_train ' + request.form['train_id'])
+    print(ret)
+    if len(ret) and ret[0] == '0':
+        return msg['invalid_query'], 400
+    ret = parse_train(ret)
     print(ret[0])
     print(ret[1])
     print(ret[2])
@@ -117,9 +123,11 @@ def modify_train_page():
 
 @TrainSystem.route('/api/modify_train', methods=['POST'])
 def modify_train():
-    if get_privilege() != 3:
-        abort(Response(msg['permission_denied']))
-    ret = runCommand('modify_train' + encode_train(request.json))
-    if ret == 0:
-        abort(Response(msg['modify_failed']))
-    return ret
+    if get_privilege() != 1:
+        return msg['permission_denied'], 400
+    a = request.get_data().decode('utf-8')
+    a = json.loads(a)
+    ret = runCommand('modify_train ' + encode_train(a))
+    if ret[0] == 0:
+        return msg['modify_failed'], 400
+    return ret[0]

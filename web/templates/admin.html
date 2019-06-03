@@ -3,13 +3,13 @@
 {% block content %}
     <a class="nav-link" href="/add_train">添加车次</a>
     <a class="nav-link" href="/query_train">查询车次</a>
-    <a class="nav-link" href="/sale_train">公开车次</a>
+    <a class="nav-link" href="/sale_train">发售车次</a>
     <a class="nav-link" href="/delete_train">删除车次</a>
-    <a class="nav-link" data-toggle="modal" data-target="#myModal">增加管理员</a>
-
+    <a class="nav-link" data-toggle="modal" data-target="#myModal2">增加管理员</a>
+    <a class="nav-link" href="/api/clean">清空所有数据</a>
 
     <div class="container">
-        <div class="modal fade" id="myModal">
+        <div class="modal fade" id="myModal2">
           <div class="modal-dialog">
             <div class="modal-content" id="query">
               <div class="modal-header">
@@ -19,12 +19,13 @@
                 <input v-model="id" type="text" class="form-control"></input>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-primary" v-on:click="submit">提交</button>
+                <button type="button" class="btn btn-primary" v-on:click="submit2">提交</button>
                 <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
               </div>
             </div>
           </div>
         </div>
+    </div>
 <script>
   var vm = new Vue({
             el: '#query',
@@ -37,7 +38,7 @@
                     this.catalog = event;
                     //console.log(catalog);
                 },
-                submit: function(event) {
+                submit2: function(event) {
                     event.preventDefault();
                     $.ajax({
                         type: 'POST',
@@ -54,6 +55,7 @@
                             alert(XMLHttpRequest.responseText);
                         }
                     });
+                    this.id = '';
                 }
             }
         });

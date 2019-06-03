@@ -1,14 +1,4 @@
-/*
- * extendible_hash.h : implementation of in-memory hash table using extendible
- * hashing
- *
- * Functionality: The buffer pool manager must maintain a page table to be able
- * to quickly map a PageId to its corresponding memory location; or alternately
- * report that the PageId does not match any currently-buffered page.
- */
-
 #pragma once
-//#include <list>
 #include "list.hpp"
 #include <cstdlib>
 #include <vector>
@@ -63,11 +53,6 @@ private:
 //  std::list<std::pair<K,V>> keyvals;
 };
 
-
-/*
- * constructor
- * array_size: fixed array size for each bucket
- */
     template <typename K, typename V, typename hash>
     ExtendibleHash<K, V, hash>::ExtendibleHash(size_t size) {
         p = size;
@@ -90,47 +75,30 @@ private:
         delete(t);
     }
 
-/*
- * helper function to calculate the hashing address of input key
- */
     template <typename K, typename V, typename hash>
     size_t ExtendibleHash<K, V, hash>::HashKey(const K &key) const {
         return hash()(key);
 //  return (size_t )(key)%hashmap.bucket_count();
     }
 
-/*
- * helper function to return global depth of hash table
- * NOTE: you must implement this function in order to pass test
- */
     template <typename K, typename V, typename hash>
     int ExtendibleHash<K, V, hash>::GetGlobalDepth() const {
         return p;
 //  return hashmap.max_bucket_count();
     }
 
-/*
- * helper function to return local depth of one specific bucket
- * NOTE: you must implement this function in order to pass test
- */
     template <typename K, typename V, typename hash>
     int ExtendibleHash<K, V, hash>::GetLocalDepth(int bucket_id) const {
         return p;
 //  return hashmap.bucket_size(bucket_id);
     }
 
-/*
- * helper function to return current number of bucket in hash table
- */
     template <typename K, typename V, typename hash>
     int ExtendibleHash<K, V, hash>::GetNumBuckets() const {
         return p;
 //  return hashmap.bucket_count();
     }
 
-/*
- * lookup function to find value associate with input key
- */
     template <typename K, typename V, typename hash>
     bool ExtendibleHash<K, V, hash>::Find(const K &key, V &value) {
         int index = HashKey(key);
@@ -157,10 +125,6 @@ private:
         return false;
     }
 
-/*
- * delete <key,value> entry in hash table
- * Shrink & Combination is not required for this project
- */
     template <typename K, typename V, typename hash>
     bool ExtendibleHash<K, V, hash>::Remove(const K &key) {
         int index = HashKey(key);
@@ -183,11 +147,6 @@ private:
         return false;
     }
 
-/*
- * insert <key,value> entry in hash table
- * Split & Redistribute bucket when there is overflow and if necessary increase
- * global depth
- */
     template <typename K, typename V, typename hash>
     void ExtendibleHash<K, V, hash>::Insert(const K &key, const V &value) {
 //        hashmap[key]=value;
