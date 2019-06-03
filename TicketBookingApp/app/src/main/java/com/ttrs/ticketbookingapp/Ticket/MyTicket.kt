@@ -3,6 +3,7 @@ package com.ttrs.ticketbookingapp.Ticket
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,17 +28,16 @@ class MyTicket : BaseActivity() {
         container.addView(contentView, 1)
 
         val id = getSharedPreferences("userInfo", Context.MODE_PRIVATE).getString("id", "")
-        val toSend = String.format(getString(R.string.query_all_ticket), id)
+        val toSend = String.format(getString(R.string.query_all_order), id)
         Client().send(toSend, object : SocketCallbackListener {
             override fun onFinish(result: String?) {
                 runOnUiThread {
-//                    val result2 = "1\n" +
-//                            "c100 北京 2018-03-28 08:00 上海 2018-03-28 08:01 一等座 2000 765.50 二等座 2000 765.49 三\n" +
-//                            "等座 2000 765.48"
+                    Log.d("MyTicket", result)
                     ticketList = parseTicket(result)
                     if (ticketList.isEmpty()) {
                         Snackbar.make(myTicket, R.string.no_ticket, Snackbar.LENGTH_SHORT).show()
                     } else {
+                        getSharedPreferences("userInfo", Context.MODE_PRIVATE).edit().putBoolean("isBuy", false).apply()
                         val viewManager = LinearLayoutManager(this@MyTicket)
                         val viewAdapter = TicketAdapter(ticketList, this@MyTicket)
                         findViewById<RecyclerView>(R.id.myTicketRecycler).apply {

@@ -47,19 +47,22 @@ class TicketInfo : BaseActivity() {
         ticketInfo_departTime.text = curTicket.fromTime
         ticketInfo_destTime.text = curTicket.toTime
 
+        val isBuy = getSharedPreferences("userInfo", Context.MODE_PRIVATE).getBoolean("isBuy", true)
 
         for (seat in curTicket.seatList) {
             val button = Button(this)
             button.layoutParams = GridLayout.LayoutParams(
                     GridLayout.spec(GridLayout.UNDEFINED, 1F),
                     GridLayout.spec(GridLayout.UNDEFINED, 1F))
-            button.text = String.format("%s\n%s元 剩余: %s张", seat.kind, seat.price, seat.numLeft)
+            button.text = if (isBuy) { String.format("%s\n%s元 剩余: %s张", seat.kind, seat.price, seat.numLeft)}
+                          else {String.format("%s\n已购买: %s张", seat.kind, seat.numLeft)}
+
             button.setOnClickListener {
                 val builder: AlertDialog.Builder = this.let {
                     AlertDialog.Builder(it)
                 }
                 val num = EditText(this)
-                builder.setTitle(R.string.prompt_buy)
+                builder.setTitle(if (isBuy) { R.string.prompt_buy } else { R.string.prompt_refund })
                         .setView(num)
                         .setPositiveButton(R.string.positive_button) { _, _ ->
                             val info = getSharedPreferences("userInfo", Context.MODE_PRIVATE)
@@ -68,21 +71,24 @@ class TicketInfo : BaseActivity() {
                                 val intent = Intent(this, LoginActivity::class.java)
                                 startActivity(intent)
                             } else {
-                                var isBuy = true
                                 if (isBuy) {
                                     val toSend = String.format(getString(R.string.buy_ticket), id, num.text, curTicket.id,
                                             curTicket.fromLoc, curTicket.toLoc, curTicket.fromTime.substring(0, 10), seat.kind)
                                     Client().send(toSend, object : SocketCallbackListener {
                                         override fun onFinish(result: String) {
+                                            runOnUiThread {
                                             if (result == "1") {
-                                                Snackbar.make(activity_ticket_info, R.string.buy_success, Snackbar.LENGTH_SHORT).show()
-                                                seat.numLeft -= Integer.parseInt(num.text.toString())
-                                                button.text = "${seat.kind}\n${seat.price}元 剩余: ${seat.numLeft}张"
-                                            } else Snackbar.make(activity_ticket_info, R.string.buy_fail, Snackbar.LENGTH_SHORT).show()
+                                                    Snackbar.make(activity_ticket_info, R.string.buy_success, Snackbar.LENGTH_SHORT).show()
+                                                    seat.numLeft -= Integer.parseInt(num.text.toString())
+                                                    button.text = "${seat.kind}\n${seat.price}元 剩余: ${seat.numLeft}张"
+                                                } else Snackbar.make(activity_ticket_info, R.string.buy_fail, Snackbar.LENGTH_SHORT).show()
+                                            }
                                         }
 
                                         override fun onError(e: Exception) {
-                                            Snackbar.make(activity_ticket_info, R.string.buy_fail, Snackbar.LENGTH_SHORT).show()
+                                            runOnUiThread {
+                                                Snackbar.make(activity_ticket_info, R.string.buy_fail, Snackbar.LENGTH_SHORT).show()
+                                            }
                                         }
                                     })
                                 } else {
@@ -90,21 +96,26 @@ class TicketInfo : BaseActivity() {
                                             curTicket.fromLoc, curTicket.toLoc, curTicket.fromTime.substring(0, 10), seat.kind)
                                     Client().send(toSend, object : SocketCallbackListener {
                                         override fun onFinish(result: String) {
-                                            if (result == "1") {
-                                                Snackbar.make(activity_ticket_info, R.string.buy_success, Snackbar.LENGTH_SHORT).show()
-                                                seat.numLeft -= Integer.parseInt(num.text.toString())
-                                                button.text = "${seat.kind}\n${seat.price}元 剩余: ${seat.numLeft}张"
-                                            } else Snackbar.make(activity_ticket_info, R.string.buy_fail, Snackbar.LENGTH_SHORT).show()
+                                            runOnUiThread {
+                                                Log.d("RefundTicket", result)
+                                                if (result == "1") {
+                                                    Snackbar.make(activity_ticket_info, R.string.refund_success, Snackbar.LENGTH_SHORT).show()
+                                                    seat.numLeft -= Integer.parseInt(num.text.toString())
+                                                    button.text = "${seat.kind}\n 已购买: ${seat.numLeft}张"
+                                                } else Snackbar.make(activity_ticket_info, R.string.buy_fail, Snackbar.LENGTH_SHORT).show()
+                                            }
                                         }
 
                                         override fun onError(e: Exception) {
-                                            Snackbar.make(activity_ticket_info, R.string.buy_fail, Snackbar.LENGTH_SHORT).show()
+                                            runOnUiThread {
+                                                Snackbar.make(activity_ticket_info, R.string.buy_fail, Snackbar.LENGTH_SHORT).show()
+                                            }
                                         }
                                     })
                                 }
                             }
                         }
-                        .setNegativeButton(R.string.cancel){ dialog, _ ->
+                        .setNegativeButton(R.string.cancel) { dialog, _ ->
                             dialog.cancel()
                         }
                 val dialog = builder.create()

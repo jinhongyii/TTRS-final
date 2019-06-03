@@ -13,5 +13,5 @@
     <string name="query_transfer_ticket">query_transfer %s %s %s %s</string>
     <string name="buy_ticket">buy_ticket %s %s %s %s %s %s %s</string>
     <string name="refund_ticket">refund_ticket %s %s %s %s %s %s %s</string>
-    <string name="query_all_ticket">query_all_ticket %s</string>
+    <string name="query_all_order">query_all_order %s</string>
 </resources>

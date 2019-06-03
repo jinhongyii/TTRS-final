@@ -13,7 +13,7 @@ const std::string rem_address = "127.0.0.1";
 boost::asio::ip::address add;
 tcp::endpoint endpoint;
 
-sjtu::Console console;
+sjtu::Console *console;
 
 class session
 {
@@ -49,7 +49,7 @@ public:
 				std::istringstream is(data);
 				std::cerr << is.str() << std::endl;
 				std::ostringstream os;
-				console.processline(is, os);
+				console->processline(is, os);
 
 				memset(output, 0, sizeof(output));
 				strcpy(output, os.str().c_str());
@@ -102,6 +102,11 @@ public:
 
 int main()
 {
+	sjtu::logRecovery.Redo();
+	sjtu::logRecovery.Undo();
+	sjtu::Console t;
+	console = &t;
+
 	std::cout << "Server start" << std::endl;
     try
     {
