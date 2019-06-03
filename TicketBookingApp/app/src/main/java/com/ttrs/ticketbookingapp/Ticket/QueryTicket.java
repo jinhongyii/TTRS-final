@@ -61,7 +61,7 @@ public class QueryTicket extends BaseActivity {
         List<Location> list = new ArrayList<>();
         String[] location = getResources().getStringArray(R.array.location);
         for (String i : location) {
-            list.add(new Location(i.split("[|]")[1], i.split("[|]")[0]));
+            list.add(new Location(i.split("[|]")[1] + i.split("[|]")[2], i.split("[|]")[0]));
         }
 
         loc1.setAdapter(new LocationAutoCompleteAdapter(this, android.R.layout.simple_dropdown_item_1line, list));
